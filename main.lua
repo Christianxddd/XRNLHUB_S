@@ -1,93 +1,27 @@
-local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
-local UIS = game:GetService("UserInputService")
+local ScreenGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+ScreenGui.Name = "XRNL_GUI"
 
--- Ícono flotante
-local icon = Instance.new("ImageButton")
-icon.Name = "XRNL_Icon"
-icon.Size = UDim2.new(0, 60, 0, 60)
-icon.Position = UDim2.new(0, 10, 0.5, -30)
-icon.BackgroundTransparency = 1
-icon.Image = "rbxassetid://15650720854" -- Tu ícono personalizado
-icon.Parent = game.CoreGui
+local Icon = Instance.new("ImageButton")
+Icon.Name = "OpenIcon"
+Icon.Size = UDim2.new(0, 50, 0, 50)
+Icon.Position = UDim2.new(0, 20, 0.5, -25)
+Icon.Image = "rbxassetid://120008128829681" -- Ícono personalizado
+Icon.BackgroundTransparency = 1
+Icon.Parent = ScreenGui
+Icon.ZIndex = 1000
+Icon.Active = true
+Icon.Draggable = true
 
--- Panel principal
-local panel = Instance.new("Frame")
-panel.Name = "XRNL_Panel"
-panel.Size = UDim2.new(0, 500, 0, 400)
-panel.Position = UDim2.new(0.5, -250, 0.5, -200)
-panel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-panel.BorderSizePixel = 0
-panel.Visible = false
-panel.Active = true
-panel.Draggable = true
-panel.Parent = game.CoreGui
-
--- Título del panel
-local title = Instance.new("TextLabel")
-title.Text = "XRNL HUB"
-title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextSize = 24
-title.Font = Enum.Font.GothamBold
-title.Parent = panel
-
--- Contenedor para secciones
-local sectionHolder = Instance.new("Frame")
-sectionHolder.Size = UDim2.new(1, 0, 1, -40)
-sectionHolder.Position = UDim2.new(0, 0, 0, 40)
-sectionHolder.BackgroundTransparency = 1
-sectionHolder.Parent = panel
-
--- Sección de créditos (ejemplo)
-local creditLabel = Instance.new("TextLabel")
-creditLabel.Text = "Hecho por @Christianxddd"
-creditLabel.Size = UDim2.new(1, 0, 0, 30)
-creditLabel.Position = UDim2.new(0, 0, 1, -30)
-creditLabel.BackgroundTransparency = 1
-creditLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-creditLabel.TextSize = 16
-creditLabel.Font = Enum.Font.Gotham
-creditLabel.Parent = panel
-
--- Función para alternar el panel
-local panelVisible = false
-icon.MouseButton1Click:Connect(function()
-	panelVisible = not panelVisible
-	panel.Visible = panelVisible
-end)
-
--- Hacer ícono movible
-local dragging = false
-local dragInput, dragStart, startPos
-
-icon.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragStart = input.Position
-		startPos = icon.Position
-
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
-end)
-
-icon.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-		dragInput = input
-	end
-end)
-
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		local delta = input.Position - dragStart
-		icon.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-	end
-end)
+local XRNLFrame = Instance.new("Frame")
+XRNLFrame.Name = "XRNLFrame"
+XRNLFrame.Size = UDim2.new(0, 600, 0, 400)
+XRNLFrame.Position = UDim2.new(0.5, -300, 0.5, -200)
+XRNLFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+XRNLFrame.Visible = false
+XRNLFrame.Parent = ScreenGui
+XRNLFrame.ZIndex = 999
+XRNLFrame.Active = true
+XRNLFrame.Draggable = true
 
         -- Código del panel insertado aquí abajo ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
         --[[ how esp works:
@@ -1486,4 +1420,7 @@ end)
         end)
     end)
     if not success then warn('Error al cargar el panel:', err) end
+end)
+Icon.MouseButton1Click:Connect(function()
+	XRNLFrame.Visible = not XRNLFrame.Visible
 end)
