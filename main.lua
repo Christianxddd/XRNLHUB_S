@@ -1,20 +1,19 @@
 -- Crear GUI
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "FloatingIcon"
+ScreenGui.Name = "XRNLFloatingGUI"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = game:GetService("CoreGui")
 
--- Crear el botón (icono)
+-- Crear el botón (ícono flotante)
 local ImageButton = Instance.new("ImageButton")
-ImageButton.Name = "DraggableIcon"
+ImageButton.Name = "FloatingIcon"
 ImageButton.Parent = ScreenGui
-ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-ImageButton.Position = UDim2.new(0, 100, 0, 100)
-ImageButton.Size = UDim2.new(0, 48, 0, 48)
-ImageButton.Image = "rbxassetid://120008128829681" -- REEMPLAZA si deseas otro ícono
-ImageButton.BorderSizePixel = 0
-ImageButton.AutoButtonColor = false
+ImageButton.BackgroundTransparency = 1
+ImageButton.Position = UDim2.new(0, 50, 0, 120)
+ImageButton.Size = UDim2.new(0, 50, 0, 50)
+ImageButton.Image = "rbxassetid://120008128829681"
+ImageButton.AutoButtonColor = true
 ImageButton.Active = true
 ImageButton.Selectable = true
 
@@ -23,14 +22,19 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = ImageButton
 
--- Sonido al hacer clic
-local Sound = Instance.new("Sound", ImageButton)
-Sound.SoundId = "rbxassetid://9120591164"
-Sound.Volume = 1
+-- Panel que se mostrará/ocultará (asegúrate que este nombre coincida con tu panel)
+local panel = ScreenGui:FindFirstChild("MainPanel") or ScreenGui:WaitForChild("MainPanel")
 
--- Hacer el icono movible
+-- Mostrar/ocultar panel al tocar el ícono
+local panelVisible = false
+ImageButton.MouseButton1Click:Connect(function()
+	panelVisible = not panelVisible
+	panel.Visible = panelVisible
+end)
+
+-- Mover el ícono (touch y mouse)
 local UIS = game:GetService("UserInputService")
-local dragging, dragStart, startPos = false
+local dragging, dragStart, startPos
 
 local function update(input)
 	if dragging then
@@ -49,7 +53,6 @@ ImageButton.InputBegan:Connect(function(input)
 		dragging = true
 		dragStart = input.Position
 		startPos = ImageButton.Position
-
 		input.Changed:Connect(function()
 			if input.UserInputState == Enum.UserInputState.End then
 				dragging = false
@@ -59,17 +62,8 @@ ImageButton.InputBegan:Connect(function(input)
 end)
 
 UIS.InputChanged:Connect(function(input)
-	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 		update(input)
-	end
-end)
-
--- Mostrar/ocultar el panel al tocar el ícono
-ImageButton.MouseButton1Click:Connect(function()
-	Sound:Play()
-	local panel = ScreenGui:FindFirstChild("MainFrame")
-	if panel then
-		panel.Visible = not panel.Visible
 	end
 end)
 
