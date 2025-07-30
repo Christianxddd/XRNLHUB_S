@@ -12,7 +12,7 @@ ImageButton.Parent = ScreenGui
 ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ImageButton.Position = UDim2.new(0, 100, 0, 100)
 ImageButton.Size = UDim2.new(0, 48, 0, 48)
-ImageButton.Image = "rbxassetid://120008128829681"
+ImageButton.Image = "rbxassetid://120008128829681" -- REEMPLAZA si deseas otro ícono
 ImageButton.BorderSizePixel = 0
 ImageButton.AutoButtonColor = false
 ImageButton.Active = true
@@ -23,24 +23,27 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = ImageButton
 
--- Servicios
-local UIS = game:GetService("UserInputService")
-local dragging = false
-local dragStart, startPos
+-- Sonido al hacer clic
+local Sound = Instance.new("Sound", ImageButton)
+Sound.SoundId = "rbxassetid://9120591164"
+Sound.Volume = 1
 
--- Función de mover
+-- Hacer el icono movible
+local UIS = game:GetService("UserInputService")
+local dragging, dragStart, startPos = false
+
 local function update(input)
-	if not dragging then return end
-	local delta = input.Position - dragStart
-	ImageButton.Position = UDim2.new(
-		startPos.X.Scale,
-		startPos.X.Offset + delta.X,
-		startPos.Y.Scale,
-		startPos.Y.Offset + delta.Y
-	)
+	if dragging then
+		local delta = input.Position - dragStart
+		ImageButton.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
 end
 
--- Detectar toque o click (touch y mouse)
 ImageButton.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		dragging = true
@@ -61,15 +64,15 @@ UIS.InputChanged:Connect(function(input)
 	end
 end)
 
+-- Mostrar/ocultar el panel al tocar el ícono
+ImageButton.MouseButton1Click:Connect(function()
+	Sound:Play()
+	local panel = ScreenGui:FindFirstChild("MainFrame")
+	if panel then
+		panel.Visible = not panel.Visible
+	end
+end)
 
--- Sonido de maullido al hacer clic
-local Sound = Instance.new("Sound", ImageButton)
-Sound.SoundId = "rbxassetid://9120591164"
-Sound.Volume = 1
-
--- Cargar automáticamente el panel
-local success, err = pcall(function()
-        
         -- Código del panel insertado aquí abajo ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
         --[[ how esp works:
         
