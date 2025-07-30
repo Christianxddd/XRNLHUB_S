@@ -1,70 +1,48 @@
--- Crear GUI
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "XRNLFloatingGUI"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent = game:GetService("CoreGui")
-
--- Crear el botón (ícono flotante)
-local ImageButton = Instance.new("ImageButton")
-ImageButton.Name = "FloatingIcon"
-ImageButton.Parent = ScreenGui
-ImageButton.BackgroundTransparency = 1
-ImageButton.Position = UDim2.new(0, 50, 0, 120)
-ImageButton.Size = UDim2.new(0, 50, 0, 50)
-ImageButton.Image = "rbxassetid://120008128829681"
-ImageButton.AutoButtonColor = true
-ImageButton.Active = true
-ImageButton.Selectable = true
-
--- Bordes redondeados
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 12)
-UICorner.Parent = ImageButton
-
--- Panel que se mostrará/ocultará (asegúrate que este nombre coincida con tu panel)
-local panel = ScreenGui:FindFirstChild("MainPanel") or ScreenGui:WaitForChild("MainPanel")
-
--- Mostrar/ocultar panel al tocar el ícono
-local panelVisible = false
-ImageButton.MouseButton1Click:Connect(function()
-	panelVisible = not panelVisible
-	panel.Visible = panelVisible
-end)
-
--- Mover el ícono (touch y mouse)
+-- ICONO flotante con mostrar/ocultar panel
 local UIS = game:GetService("UserInputService")
-local dragging, dragStart, startPos
+local player = game.Players.LocalPlayer
+local Mouse = player:GetMouse()
 
-local function update(input)
-	if dragging then
-		local delta = input.Position - dragStart
-		ImageButton.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
-end
+-- Crear GUI si no existe
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "XRNL_HUB_GUI"
 
-ImageButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragStart = input.Position
-		startPos = ImageButton.Position
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
-end)
+-- Crear botón del ícono
+local icon = Instance.new("ImageButton")
+icon.Name = "XRNL_Icon"
+icon.Size = UDim2.new(0, 60, 0, 60)
+icon.Position = UDim2.new(0, 20, 0.5, -30)
+icon.Image = "rbxassetid://120008128829681" -- Puedes cambiar por otro ID
+icon.BackgroundTransparency = 1
+icon.Draggable = true
+icon.Active = true
+icon.Parent = gui
 
-UIS.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-		update(input)
-	end
+-- Crear el panel (oculto por defecto)
+local panel = Instance.new("Frame")
+panel.Name = "XRNL_Panel"
+panel.Size = UDim2.new(0, 500, 0, 400)
+panel.Position = UDim2.new(0.5, -250, 0.5, -200)
+panel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+panel.BorderSizePixel = 0
+panel.Visible = false
+panel.Active = true
+panel.Draggable = true
+panel.Parent = gui
+
+-- Ejemplo: título dentro del panel
+local title = Instance.new("TextLabel", panel)
+title.Text = "XRNL HUB"
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+
+-- Mostrar / Ocultar Panel al tocar el ícono
+icon.MouseButton1Click:Connect(function()
+	panel.Visible = not panel.Visible
 end)
 
         -- Código del panel insertado aquí abajo ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
